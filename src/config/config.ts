@@ -1,6 +1,14 @@
 const config = {
-  baseurl: 'https://aniwatchtv.to',
-  baseurl2: 'https://aniwatchtv.to',
+  baseurl: 'https://hianime.lu',
+  baseurl2: 'https://hianime.at',
+  fallbackBaseurls: [
+    'https://hianime.lu',
+    'https://hianime.at',
+    'https://hianime.gy',
+    'https://hianime.tr',
+    'https://hianimetv.bz',
+    'https://hianime.ba',
+  ],
   origin: '*',
   port: 5000,
 
