@@ -11,11 +11,17 @@ export const axiosInstance = async (
   options: { headers?: Record<string, string>; retries?: number } = {}
 ) => {
   const { headers: customHeaders = {}, retries = MAX_RETRIES } = options;
-  const url = config.baseurl + endpoint;
+  const configuredBases = Array.isArray((config as typeof config & { fallbackBaseurls?: string[] }).fallbackBaseurls)
+    ? (config as typeof config & { fallbackBaseurls: string[] }).fallbackBaseurls
+    : [config.baseurl, config.baseurl2];
+
   let lastError = null;
 
-  for (let attempt = 0; attempt < retries; attempt++) {
-    try {
+  for (const base of configuredBases) {
+    const url = base + endpoint;
+
+    for (let attempt = 0; attempt < retries; attempt++) {
+      try {
       if (attempt > 0) {
         const delay = RETRY_DELAY * Math.pow(2, attempt - 1);
         console.log(`Retry attempt ${attempt + 1}/${retries} after ${delay}ms delay...`);
@@ -90,8 +96,9 @@ export const axiosInstance = async (
         }
       }
 
-      if (attempt === retries - 1) {
-        break;
+        if (attempt === retries - 1) {
+          break;
+        }
       }
     }
   }
